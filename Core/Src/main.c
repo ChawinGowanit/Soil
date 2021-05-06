@@ -67,24 +67,11 @@ char uData[1] = { };
 char buffer[100] = { };
 uint8_t iPointer = 0;
 char *uBuffer;
-uint8_t airCon = 0;
+uint8_t soiSensor = 0;
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-	inputBuffer[iPointer] = uData[0];
-	iPointer++;
-	if (uData[0] == ';') {
-		inputBuffer[iPointer] = '\0';
-		iPointer = 0;
-		uBuffer = strtok(inputBuffer, "\t");
-		airCon = *uBuffer == '1' ? 1 : 0;
-		uBuffer = strtok(NULL, "\t");
-		airPure = *uBuffer == '1' ? 1 : 0;
-		if (airCon == 1) {
-			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);
-		} else {
-			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
-		}
-		HAL_UART_Receive_IT(&huart2, (uint8_t*) uData, 1);
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart2) {
+	//recieve data from sensor
+	//transmit sprinkle status
 	}
 
 	int main(void) {
@@ -118,8 +105,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 		/* USER CODE BEGIN WHILE */
 		while (1) {
 			if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)) {
-						HAL_GPIO_TogglePin(GPIOA, 5);
-						while (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)) {
+				//toggle springkle status transmit by uart
+				while (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)) {
 							HAL_Delay(75);
 						}
 					}
